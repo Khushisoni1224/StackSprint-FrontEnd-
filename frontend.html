@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrontEnd Page-Stacksprint</title>
+    <!-- CodeMirror CSS (for editor styling) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.css">
+  <!-- Optional Theme: Dracula (dark mode look) -->
+ <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/theme/dracula.min.css"> --> 
+
+    <style>
+/* Animated gradient background */
+  body {
+    margin: 0;
+    padding: 0;
+    animation: gradientShift 15s ease infinite;
+    background: linear-gradient(to right, #e6f7ff, #f9fcff);
+    background-size: 600% 600%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .container {
+    background-color: transparent; /* allow background to show */
+  }
+
+  .header {
+    text-align: center;
+    border: solid;
+    border-color: #058293;
+    border-radius: 20px;
+    background-color: rgba(78, 151, 177, 0.85);
+    padding: 10px;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+
+  .back-arrow {
+    display: inline-block;
+    font-size: 18px;
+    margin: 5px;
+    text-align: left;
+    text-decoration: none;
+    background-color: #058293;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+  }
+
+  .back-arrow:hover {
+    background-color: #0056b3;
+  }
+
+  nav ul {
+    padding: 20px;
+    margin: 0px;
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    border: solid lightblue;
+    border-radius: 50px;
+    background-color: lightblue;
+  }
+
+  nav ul li a {
+    color: #004466;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+  }
+
+  .data {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 30px;
+    border: solid 1px;
+    border-left: 5px solid #058293;
+    border-radius: 8px;
+    box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 40px;
+    text-align: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .intro-list {
+    text-decoration: none;
+    list-style-type: none;
+    margin: 1px;
+  }
+
+  .keypoints-html {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .keypoints-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .keypoint-box {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-left: 6px solid #058293;
+    border-radius: 10px;
+    padding: 15px 20px;
+    width: 280px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+    backdrop-filter: blur(4px);
+  }
+
+  .keypoint-box:hover {
+    transform: scale(1.03);
+  }
+
+  .keypoint-title {
+    font-weight: bold;
+    font-size: 18px;
+    color: #222;
+    margin-bottom: 8px;
+  }
+
+  .keypoint-desc {
+    font-size: 15px;
+    color: #555;
+  }
+
+  .h2_html_editor {
+    text-align: center;
+    color: #333;
+  }
+
+  #editor-container,
+  #css-editor-container,
+  #js-editor-container {
+    max-width: 700px;
+    margin: auto;
+    background: #1e1e1e;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  #run-btn,
+  #run-css-btn,
+  #run-js-btn {
+    display: block;
+    margin: 15px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #058293;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .CodeMirror {
+    text-align: left !important;
+    font-family: monospace;
+    font-size: 14px;
+  }
+
+  .html_editor_output {
+    text-align: center;
+  }
+
+  #output,
+  #css-output {
+    width: 75%;
+    height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #js-output {
+    background: #f4f4f4;
+    padding: 10px;
+    margin: 20px auto;
+    width: 75%;
+    height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: monospace;
+    color: #222;
+    white-space: pre-wrap;
+    text-align: left;
+  }
+
+  .site-footer {
+  background-color: #1b324e;
+  color: #e0f7fa;
+  padding: 2rem 1rem;
+  font-size: 0.9rem;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: auto;
+  gap: 2rem;
+}
+
+.footer-left h3 {
+  margin: 0;
+  color: #00acc1;
+}
+
+.footer-links a {
+  display: block;
+  color: #90e0ef;
+  text-decoration: none;
+  margin: 5px 0;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #00e5ff;
+}
+
+.footer-right p {
+  margin-bottom: 0.5rem;
+}
+
+.social-icons a img {
+  width: 24px;
+  margin-right: 10px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s ease;
+}
+
+.social-icons a:hover img {
+  transform: scale(1.1);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  color: #b0bec5;
+  border-top: 1px solid #37474f;
+  padding-top: 1rem;
+}
+
+
+
+    </style>
+</head>
+<body>
+  <div class="go-back">
+          <a href="base.html" class="back-arrow" title="Back to Base Page">← </a>
+        </div>
+    <div class="container" >
+        <div class="header">
+          
+        <h1> Frontend Learning </h1>
+        <h3> Welcome to your frontend roadmap. Start from the basics and become job-ready!</h3>
+        </div>
+        
+        <br>
+        <nav class="Side-pannel">
+            <ul>
+                <li><a href="#html">HTML</a></li>
+                <li><a href="#css"> CSS </a></li>
+                <li><a href="#javascript"> Javascript </a></li>
+                <li><a href="#react"> React </a> </li>
+                <li><a href="#try-yourself">Try Yourself</a></li>
+  
+                        
+            </ul>
+
+        </nav>
+        <p></p>
+<!-- --------------------------------------------------------------------------------- -->
+            <div class="main-content">
+                <div id="introduction" class="data" >
+                    <h2> Welcome to Introduction Page of Frontend Learning !</h2>
+                    <p> Frontend development is the art of crafting visually engaging, user-friendly interfaces that bring websites and web applications to life. It’s everything users see, click, and interact with on a digital platform .</p>
+                    <p>In this section, you’ll embark on a structured journey through the core building blocks of the frontend:</p>
+                    <ul class="intro-list">
+                        <li> HTML (HyperText Markup Language) – the structure and skeleton of every web page</li>
+                        <li> CSS (Cascading Style Sheets) – the styling language used to make pages beautiful, responsive, and animated </li>
+                        <li> JavaScript – the language that brings interactivity and dynamic behavior to your pages </li>
+
+                    </ul>
+                    <p><strong> Whether you're a complete beginner or brushing up your skills, this course will guide you through concepts, best practices, and hands-on projects that mirror real-world scenarios. </strong></p>
+                    <p> By the end, you'll be confident in:</p>
+                    <ul class="intro-list">
+                        <li > Building responsive layouts</li>
+                        <li> Styling with Flexbox and Grid</li>
+                        <li> Writing JavaScript to create dynamic experiences</li>
+                        <li> Launching your own frontend mini-projects! </li>
+                    </ul>
+
+                </div>
+                <div id="html" class="data">
+                    <h2> Welcome to HTML page of Frontend Learning </h2>
+                    
+                    <p></p>
+
+                    <p> HTML (HyperText Markup Language) is the backbone of every web page you see online. It defines the structure of web content using elements like headings, paragraphs, links, and images. Learning HTML is the first step in becoming a frontend developer.</p>
+                    <p>Below are some key concepts in HTML that will help you build a solid foundation as you begin your frontend journey. 📚</p>
+
+
+  
+<h2 class="keypoints-html">📘 Intro to HTML – Key Concepts</h2>
+
+<div class="keypoints-container">
+
+  <div class="keypoint-box">
+    <div class="keypoint-title">What is HTML?</div>
+    <div class="keypoint-desc">HTML (HyperText Markup Language) is the standard language for creating web pages.</div>
+  </div>
+
+  <div class="keypoint-box">
+    <div class="keypoint-title">HTML Document Structure</div>
+    <div class="keypoint-desc">Every HTML page has a basic structure including <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, and <code>&lt;body&gt;</code>.</div>
+  </div>
+
+  <div class="keypoint-box">
+    <div class="keypoint-title">Headings in HTML</div>
+    <div class="keypoint-desc">Use heading tags from <code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code> to define titles or section headings.</div>
+  </div>
+
+  <div class="keypoint-box">
+    <div class="keypoint-title">Paragraphs and Line Breaks</div>
+    <div class="keypoint-desc">Use <code>&lt;p&gt;</code> for paragraphs and <code>&lt;br&gt;</code> for line breaks inside content.</div>
+  </div>
+
+  <div class="keypoint-box">
+    <div class="keypoint-title">Tags & Elements</div>
+    <div class="keypoint-desc">HTML consists of elements like <code>&lt;p&gt;</code>, <code>&lt;h1&gt;</code>, <code>&lt;a&gt;</code>, each defining content and structure.</div>
+  </div>
+
+  <div class="keypoint-box">
+    <div class="keypoint-title">Lists in HTML</div>
+    <div class="keypoint-desc">Use <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code> for unordered and ordered lists with <code>&lt;li&gt;</code> items.</div>
+  </div>
+
+  <div class="keypoint-box">
+    <div class="keypoint-title">Links with &lt;a&gt; Tag</div>
+    <div class="keypoint-desc">Use the anchor tag to create hyperlinks: <code>&lt;a href="..."&gt;</code></div>
+  </div>
+
+  <div class="keypoint-box">
+    <div class="keypoint-title">Adding Images</div>
+    <div class="keypoint-desc">Use the <code>&lt;img&gt;</code> tag with <code>src</code> and <code>alt</code> to embed images.</div>
+  </div>
+
+  <div class="keypoint-box">
+    <div class="keypoint-title">HTML Attributes</div>
+    <div class="keypoint-desc">Attributes like <code>href</code>, <code>src</code>, <code>alt</code> provide additional info about tags.</div>
+  </div>
+
+  <div class="keypoint-box">
+    <div class="keypoint-title">Semantic Tags</div>
+    <div class="keypoint-desc">Use <code>&lt;header&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code> to define the structure meaningfully.</div>
+  </div>
+
+  <div class="keypoint-box">
+    <div class="keypoint-title">HTML Comments</div>
+    <div class="keypoint-desc">Write comments using <code>&lt;!-- This is a comment --&gt;</code> to explain your code.</div>
+  </div>
+
+  <div class="keypoint-box">
+    <div class="keypoint-title">Forms in HTML</div>
+    <div class="keypoint-desc">Use <code>&lt;form&gt;</code> with <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code>, and <code>&lt;button&gt;</code> to collect user input.</div>
+  </div>
+
+</div>
+                    <p> To learn HTML in a proper step by step manner click on below link :</p>
+                   <p> Freecodecamp course : <a href="https://www.freecodecamp.org/learn/responsive-web-design/basic-html-and-html5/" alt="freecodecamp HTML course ">Free Html course with certification </a></p>
+                                 
+                    
+                     
+                    <h2 class="h2_html_editor"> 💻 Stacksprint HTML Editor</h2>
+                        <div id="editor-container">
+    <!-- Textarea is the base; CodeMirror will convert this into a nice editor -->
+    <textarea id="html-editor">
+<!-- Write your HTML code below -->
+<h1>Hello from Stacksprint! 🚀</h1>
+<p>This is a live HTML preview.</p>
+    </textarea>
+  </div>
+
+  <!-- Button to run and show the output -->
+  <button id="run-btn" onclick="runCode()">▶️ Run Code</button>
+<h2 class="html_editor_output"> Output : </h2>
+  <!-- Iframe where the HTML output will be displayed -->
+  <iframe id="output"></iframe>
+
+<!-- Load CodeMirror Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.js"></script>
+
+  <!-- Load modes for HTML, XML, CSS, and JS (for highlighting support) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/css/css.min.js"></script>
+ 
+  <script>
+    // Initialize the CodeMirror editor from the textarea
+    const editor = CodeMirror.fromTextArea(document.getElementById("html-editor"), {
+      mode: "htmlmixed",        // Enables HTML + CSS + JS support
+      theme: "default",         // Dark theme (you can change to default or others)
+      lineNumbers: true,        // Show line numbers
+      tabSize: 2,               // Tab size = 2 spaces
+      autoCloseTags: true       // Auto close HTML tags (optional)
+    });
+
+    
+    // Function to run the HTML code inside iframe
+    function runCode() {
+      const htmlCode = editor.getValue();              // Get the current code from editor
+      const outputFrame = document.getElementById("output"); // Select the iframe
+      outputFrame.srcdoc = htmlCode;                   // Set iframe content using srcdoc
+    }
+  </script>
+
+                   
+                </div>
+<!-- ----------------------------------------------------------------------------  --> 
+    
+                    <div id="css" class="data">
+  <h2>Welcome to CSS Page of Frontend Learning</h2>
+
+  <p>CSS (Cascading Style Sheets) is the language used to style and layout web pages — from fonts, colors, and spacing to responsive layouts and animations. Mastering CSS is key to making your websites look professional and visually appealing.</p>
+  <p>Below are some key CSS concepts you’ll use in almost every project. 📌</p>
+
+  <h2 class="keypoints-html">🎨 CSS Key Concepts</h2>
+
+  <div class="keypoints-container">
+    <div class="keypoint-box">
+      <div class="keypoint-title">CSS Syntax</div>
+      <div class="keypoint-desc">A CSS rule consists of a selector and a declaration block: <code>selector { property: value; }</code></div>
+    </div>
+
+    <div class="keypoint-box">
+      <div class="keypoint-title">Selectors</div>
+      <div class="keypoint-desc">Selectors target HTML elements like <code>h1</code>, <code>.class</code>, <code>#id</code>.</div>
+    </div>
+
+    <div class="keypoint-box">
+      <div class="keypoint-title">Colors & Backgrounds</div>
+      <div class="keypoint-desc">Style with named colors, HEX, RGB, gradients, and background images.</div>
+    </div>
+
+    <div class="keypoint-box">
+      <div class="keypoint-title">Box Model</div>
+      <div class="keypoint-desc">Every element is a box with <code>margin</code>, <code>border</code>, <code>padding</code>, and <code>content</code>.</div>
+    </div>
+
+    <div class="keypoint-box">
+      <div class="keypoint-title">Display</div>
+      <div class="keypoint-desc">Control layout using <code>block</code>, <code>inline</code>, <code>flex</code>, or <code>grid</code>.</div>
+    </div>
+
+    <div class="keypoint-box">
+      <div class="keypoint-title">Positioning</div>
+      <div class="keypoint-desc">Use <code>relative</code>, <code>absolute</code>, <code>fixed</code>, and <code>sticky</code> for element placement.</div>
+    </div>
+
+    <div class="keypoint-box">
+      <div class="keypoint-title">Flexbox</div>
+      <div class="keypoint-desc">Flexbox is a powerful layout model for responsive design and alignment.</div>
+    </div>
+
+    <div class="keypoint-box">
+      <div class="keypoint-title">Media Queries</div>
+      <div class="keypoint-desc">Use media queries to create responsive designs for all screen sizes.</div>
+    </div>
+
+    <div class="keypoint-box">
+      <div class="keypoint-title">Transitions & Animations</div>
+      <div class="keypoint-desc">Create smooth effects using <code>transition</code>, <code>animation</code>, and keyframes.</div>
+    </div>
+
+    <div class="keypoint-box">
+      <div class="keypoint-title">Best Practices</div>
+      <div class="keypoint-desc">Keep styles modular, use classes, and avoid inline CSS where possible.</div>
+    </div>
+  </div>
+
+  <p>Start learning CSS step-by-step from this free resource:</p>
+  <p>Freecodecamp course: <a href="https://www.freecodecamp.org/learn/responsive-web-design/basic-css" target="_blank">Free CSS course with certification</a></p>
+   
+<h2 class="h2_html_editor">💻 Stacksprint CSS Editor</h2>
+<div id="css-editor-container">
+  <!-- Textarea for CodeMirror -->
+  <textarea id="css-editor">
+/* Write your CSS code here */
+body {
+  background-color: lightblue;
+  color: darkblue;
+  font-family: Arial, sans-serif;
+}
+  </textarea>
+</div>
+
+<!-- Run Button -->
+<button id="run-css-btn" onclick="runCss()">▶️ Run CSS</button>
+
+<!-- Output -->
+<h2 class="html_editor_output">Output:</h2>
+<iframe id="css-output"></iframe>
+
+<!-- Load CodeMirror and Modes -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/css/css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/htmlmixed/htmlmixed.min.js"></script>
+
+<!-- Initialize CodeMirror and Run Logic -->
+<script>
+  const cssEditor = CodeMirror.fromTextArea(document.getElementById("css-editor"), {
+    mode: "css",
+    theme: "default",
+    lineNumbers: true,
+    tabSize: 2,
+    autoCloseBrackets: true
+  });
+
+  function runCss() {
+    const cssCode = cssEditor.getValue();
+    const htmlContent = `
+      <html>
+      <head><style>${cssCode}</style></head>
+      <body>
+        <h1>This is a demo output area</h1>
+        <p>Your CSS styles will apply here.</p>
+      </body>
+      </html>`;
+    document.getElementById("css-output").srcdoc = htmlContent;
+  }
+</script>
+
+</div>
+<!-- ----------------------------------------------------------------------------  --> 
+<div id="javascript" class="data">
+  <h2>Welcome to JavaScript Page of Frontend Learning</h2>
+
+  <p>JavaScript is the language that brings interactivity, logic, and dynamic content to your websites. It allows you to manipulate HTML/CSS, respond to user events, and build full-blown applications right in the browser.</p>
+
+  <h2 class="keypoints-html">🧠 JavaScript Roadmap – Key Concepts</h2>
+
+  <div class="keypoints-container">
+    <div class="keypoint-box"><div class="keypoint-title">Variables & Data Types</div><div class="keypoint-desc">Use <code>let</code>, <code>const</code>, and <code>var</code> to store data.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">Functions</div><div class="keypoint-desc">Reusable blocks of code defined with <code>function</code> or arrow syntax.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">Conditionals</div><div class="keypoint-desc">Use <code>if</code>, <code>else</code>, <code>switch</code> to control flow.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">Loops</div><div class="keypoint-desc">Use <code>for</code>, <code>while</code>, <code>forEach</code> to repeat actions.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">Arrays & Objects</div><div class="keypoint-desc">Store multiple values and key-value pairs efficiently.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">DOM Manipulation</div><div class="keypoint-desc">Use <code>document.querySelector</code>, <code>innerHTML</code>, etc., to change the page.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">Events</div><div class="keypoint-desc">Handle clicks, typing, mouse moves with <code>addEventListener</code>.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">ES6 Features</div><div class="keypoint-desc">Learn modern features like <code>let</code>, <code>const</code>, arrow functions, template literals, destructuring.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">APIs & Fetch</div><div class="keypoint-desc">Make HTTP requests and work with real data using <code>fetch()</code>.</div></div>
+  </div>
+
+  <p>📘 Learn JavaScript step-by-step: <a href="https://www.freecodecamp.org/learn/javascript-algorithms-and-data-structures/" target="_blank">Free JavaScript Course by freeCodeCamp</a></p>
+
+  <h2 class="h2_html_editor">💻 Stacksprint JavaScript Editor</h2>
+
+<div id="js-editor-container">
+  <textarea id="js-editor">
+// Write your JS below
+document.body.style.backgroundColor = '#f0f8ff';
+console.log("Hello from JavaScript editor 🚀");
+document.getElementById('js-output').innerText = "Welcome! JS ran successfully.";
+  </textarea>
+</div>
+
+<button id="run-js-btn" onclick="runJavaScript()">▶️ Run JS</button>
+
+<h2 class="html_editor_output">Output:</h2>
+<pre id="js-output"></pre>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/javascript/javascript.min.js"></script>
+
+<script>
+  const jsEditor = CodeMirror.fromTextArea(document.getElementById("js-editor"), {
+    mode: "javascript",
+    theme: "default",
+    lineNumbers: true,
+    tabSize: 2,
+    autoCloseBrackets: true
+  });
+
+  function runJavaScript() {
+    const jsCode = jsEditor.getValue();
+    try {
+      // Clear previous output
+      document.getElementById('js-output').innerText = '';
+      const log = console.log;
+      let output = '';
+      console.log = function(message) {
+        output += message + '\n';
+        log.apply(console, arguments);
+      };
+
+      eval(jsCode);  // Run code
+      document.getElementById('js-output').innerText = output || '✅ Code ran with no console output.';
+      console.log = log; // Reset console
+    } catch (err) {
+      document.getElementById('js-output').innerText = '❌ Error:\n' + err.message;
+    }
+  }
+</script>
+
+</div>
+
+
+<!-- ----------------------------------------------------------------------------  --> 
+<div id="react" class="data">
+  <h2>Welcome to React Page of Frontend Learning</h2>
+
+  <p>React is a powerful JavaScript library developed by Meta (Facebook) for building modern, fast, and scalable user interfaces. It allows you to create reusable UI components and handle the dynamic nature of web apps efficiently.</p>
+
+  <h2 class="keypoints-html">⚛️ React Roadmap – Key Concepts</h2>
+
+  <div class="keypoints-container">
+    <div class="keypoint-box"><div class="keypoint-title">JSX</div><div class="keypoint-desc">A syntax extension that lets you write HTML-like code inside JavaScript.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">Components</div><div class="keypoint-desc">Building blocks of React. Use functional or class components to organize your UI.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">Props</div><div class="keypoint-desc">Props (short for properties) allow you to pass data to components.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">State</div><div class="keypoint-desc">State holds dynamic data and allows components to re-render when data changes.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">useState Hook</div><div class="keypoint-desc">A React Hook that adds state to functional components.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">useEffect Hook</div><div class="keypoint-desc">Lets you run side effects (like fetching data) in functional components.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">Events</div><div class="keypoint-desc">React handles events like <code>onClick</code>, <code>onChange</code> using camelCase syntax.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">Conditional Rendering</div><div class="keypoint-desc">Use <code>if</code>, <code>ternary</code> or <code>logical &&</code> to show elements based on logic.</div></div>
+    <div class="keypoint-box"><div class="keypoint-title">Component Lifecycle</div><div class="keypoint-desc">Understanding mounting, updating, and unmounting phases is crucial.</div></div>
+  </div>
+
+  <p>📘 Learn React step-by-step: <a href="https://www.freecodecamp.org/learn/front-end-development-libraries/react/" target="_blank">Free React Course with Certification (freeCodeCamp)</a></p>
+
+ <div id="react-editor" >
+  <h2>💡 Coming Soon: Stacksprint React Editor</h2>
+  <p>Live React + JSX editor is under development. Stay tuned for the best frontend coding experience!</p>
+</div>
+
+
+
+
+</div>
+
+ 
+<!-- ----------------------------------------------------------------------------  --> 
+                <div id="try-yourself" class="data">
+  <h2 class="h2_html_editor">💻 Stacksprint Practice Editor</h2>
+  <p>You can write your HTML code below and see the live output on the right.</p>
+
+  <div id="editor-container">
+    <textarea id="practice-editor">
+<!-- Start writing your HTML here -->
+<h2>Welcome to Stacksprint Editor</h2>
+<p>This is your practice playground 🚀</p>
+    </textarea>
+  </div>
+
+  <button id="run-btn" onclick="runPractice()">▶️ Run Code</button>
+  <h2 class="html_editor_output">Output:</h2>
+  <iframe id="output"></iframe>
+</div>
+
+<!-- ✅ CodeMirror Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/htmlmixed/htmlmixed.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/xml/xml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/javascript/javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.12/mode/css/css.min.js"></script>
+
+<!-- ✅ Practice Editor Initialization -->
+<script>
+  const practiceEditor = CodeMirror.fromTextArea(document.getElementById("practice-editor"), {
+    mode: "htmlmixed",
+    theme: "default",
+    lineNumbers: true,
+    tabSize: 2,
+    autoCloseTags: true
+  });
+
+  function runPractice() {
+    const htmlCode = practiceEditor.getValue();
+    const outputFrame = document.getElementById("output");
+    outputFrame.srcdoc = htmlCode;
+  }
+</script>
+                </div>
+
+
+
+            </div>
+<!-- --------------------------------------------------------------------------------- -->
+            
+
+        </div>
+    </div>
+
+    <footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-left">
+      <h3>StackSprint</h3>
+      <p>Your all-in-one tech learning guide. Master frontend, backend & databases.</p>
+    </div>
+    <div class="footer-links">
+      <a href="frontend.html">Frontend</a>
+      <a href="backend.html">Backend</a>
+      <a href="database.html">Database</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div class="footer-right">
+      <p>Connect with us:</p>
+      <div class="social-icons">
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" /></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Twitter" /></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733614.png" alt="Instagram" /></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 StackSprint. All rights reserved.</p>
+  </div>
+</footer>
+ 
+
+
+
+</body> 
+</html>

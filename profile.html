@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile page-Stacksprint</title>
+<style>
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #e0f7fa, #80deea);
+    color: #1b324e;
+  }
+.back-button {
+    display: inline-block;
+    margin: 1rem;
+    text-decoration: none;
+    color: #0077b6;
+    font-weight: bold;
+    background: #ffffff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+  }
+
+  .back-button:hover {
+    background: #caf0f8;
+  }
+
+  .profile-container {
+    max-width: 700px;
+    margin: 3rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .profile-container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #0077b6;
+  }
+
+  .profile-form label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+  }
+
+  .profile-form input,
+  .profile-form textarea,
+  .profile-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .profile-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #0077b6;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .profile-form button:hover {
+    background-color: #005f87;
+  }
+
+  .profile-preview {
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  .profile-preview img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #0077b6;
+    margin-bottom: 1rem;
+  }
+
+.site-footer {
+  background-color: #1b324e;
+  color: #e0f7fa;
+  padding: 2rem 1rem;
+  font-size: 0.9rem;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: auto;
+  gap: 2rem;
+}
+
+.footer-left h3 {
+  margin: 0;
+  color: #00acc1;
+}
+
+.footer-links a {
+  display: block;
+  color: #90e0ef;
+  text-decoration: none;
+  margin: 5px 0;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #00e5ff;
+}
+
+.footer-right p {
+  margin-bottom: 0.5rem;
+}
+
+.social-icons a img {
+  width: 24px;
+  margin-right: 10px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s ease;
+}
+
+.social-icons a:hover img {
+  transform: scale(1.1);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  color: #b0bec5;
+  border-top: 1px solid #37474f;
+  padding-top: 1rem;
+}
+
+
+
+
+</style>
+
+</head>
+<body>
+<a class="back-button" href="base.html">← Back to Home</a>
+
+<div class="profile-container">
+  <h2>Your Profile</h2>
+  <form class="profile-form" onsubmit="event.preventDefault(); showPreview();">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" placeholder="Enter your name" required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" placeholder="Enter your email" required>
+
+    <label for="username">Username</label>
+    <input type="text" id="username" placeholder="Choose a username" required>
+
+    <label for="bio">Short Bio</label>
+    <textarea id="bio" placeholder="Tell us about yourself" rows="4"></textarea>
+
+    <label for="learning-path">Learning Path</label>
+    <select id="learning-path">
+      <option value="frontend">Frontend Development</option>
+      <option value="backend">Backend Development</option>
+      <option value="fullstack">Full Stack Development</option>
+      <option value="ai">AI/ML Enthusiast</option>
+      <option value="database">Database Admin</option>
+    </select>
+
+    <label for="image">Profile Image</label>
+    <input type="file" id="image" accept="image/*" onchange="previewImage(event)">
+
+    <button type="submit">Update Profile</button>
+  </form>
+
+  <div class="profile-preview" id="preview">
+    <img id="preview-img" src="" alt="Profile Image Preview" style="display: none;" />
+    <h3 id="preview-name"></h3>
+    <p id="preview-bio"></p>
+  </div>
+</div>
+
+<script>
+  function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+      const img = document.getElementById('preview-img');
+      img.src = reader.result;
+      img.style.display = 'block';
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+  function showPreview() {
+    document.getElementById('preview-name').textContent = document.getElementById('name').value;
+    document.getElementById('preview-bio').textContent = document.getElementById('bio').value;
+  }
+</script>
+
+
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-left">
+      <h3>StackSprint</h3>
+      <p>Your all-in-one tech learning guide. Master frontend, backend & databases.</p>
+    </div>
+    <div class="footer-links">
+      <a href="frontend.html">Frontend</a>
+      <a href="backend.html">Backend</a>
+      <a href="database.html">Database</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div class="footer-right">
+      <p>Connect with us:</p>
+      <div class="social-icons">
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" /></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Twitter" /></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733614.png" alt="Instagram" /></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 StackSprint. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

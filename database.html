@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database-Stacksprint</title>
+    <style>
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #e6f7ff, #f9fcff);
+  margin: 0;
+  padding: 0;
+  color: #1a1a1a;
+}
+
+.main-content {
+  margin: 20px;
+  padding: 20px;
+  animation: slideIn 1s ease-out;
+}
+
+.back-arrow {
+  display: inline-block;
+  font-size: 18px;
+  text-align: left;
+  text-decoration: none;
+  background-color: #058293;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.back-arrow:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.Header {
+  text-align: center;
+  border: 2px solid #058293;
+  border-radius: 20px;
+  background-color: #4e97b1;
+  padding: 15px;
+  color: #fff;
+  animation: fadeIn 1s ease;
+}
+
+nav ul {
+  padding: 15px;
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  border-radius: 50px;
+  background-color: lightskyblue;
+  animation: fadeIn 1s ease;
+}
+
+nav ul li a {
+  color: #004466;
+  text-decoration: none;
+  margin: 0 20px;
+  font-weight: 500;
+  transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+  color: #00796b;
+  font-weight: 600;
+}
+
+.data {
+  background-color: #fdfdfd;
+  padding: 30px;
+  border-left: 5px solid #058293;
+  border-radius: 10px;
+  box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 40px;
+  animation: fadeInUp 1s ease-out;
+}
+
+.db-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  animation: fadeIn 1s ease;
+}
+
+.db-card {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  animation: slideIn 1s ease-in-out;
+}
+
+.db-card h2 {
+  color: #007bff;
+}
+
+.db-card p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+pre {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 15px;
+  border-radius: 8px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  animation: fadeIn 1s ease;
+}
+
+textarea.editor {
+  width: 100%;
+  height: 100px;
+  font-family: monospace;
+  padding: 10px;
+  border: 2px solid #058293;
+  border-radius: 8px;
+  background-color: #f5faff;
+  resize: vertical;
+  color: #111;
+  font-size: 14px;
+}
+
+.run-btn {
+  background: #00796b;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 15px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.run-btn:hover {
+  background-color: #004d40;
+  transform: scale(1.05);
+}
+
+.output-box {
+  margin-top: 10px;
+  padding: 15px;
+  background: #111;
+  border-radius: 8px;
+  font-family: monospace;
+  color: #00ff88;
+  min-height: 80px;
+  white-space: pre-wrap;
+  animation: fadeIn 0.8s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.site-footer {
+  background-color: #1b324e;
+  color: #e0f7fa;
+  padding: 2rem 1rem;
+  font-size: 0.9rem;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: auto;
+  gap: 2rem;
+}
+
+.footer-left h3 {
+  margin: 0;
+  color: #00acc1;
+}
+
+.footer-links a {
+  display: block;
+  color: #90e0ef;
+  text-decoration: none;
+  margin: 5px 0;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #00e5ff;
+}
+
+.footer-right p {
+  margin-bottom: 0.5rem;
+}
+
+.social-icons a img {
+  width: 24px;
+  margin-right: 10px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s ease;
+}
+
+.social-icons a:hover img {
+  transform: scale(1.1);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  color: #b0bec5;
+  border-top: 1px solid #37474f;
+  padding-top: 1rem;
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="go-back">
+          <a href="base.html" class="back-arrow" title="Back to Base Page">← </a>
+        </div>
+
+<div class="main-content">
+<header class="Header">
+    <h1> Database Learning </h1>
+    <h3> This interactive module introduces you to different types of databases used in modern applications. 
+    From traditional SQL to cutting-edge NoSQL technologies like MongoDB and Firebase, you'll explore 
+    how data is structured, queried, and managed — with code editors to practice in real-time.</h3>
+    </header>
+    <br>
+    <nav>
+        <ul>
+    <li><a href="#sql">SQL Basics</a></li>
+    <li><a href="#plsql">PL/SQL</a></li>
+    <li><a href="#tsql">T-SQL</a></li>
+    <li><a href="#mongodb">MongoDB</a></li>
+    <li><a href="#firebase">Firebase</a></li>
+    <li><a href="#neo4j">Neo4j</a></li>
+    <li><a href="#redis">Redis</a></li>
+        </ul>
+    </nav>
+    <br>
+<div class="db-container">
+
+  <!-- SQL Basics -->
+  <div class="db-card">
+    <h2>🟦 SQL Basics (MySQL / PostgreSQL)</h2>
+    <p>Structured Query Language (SQL) is the most widely used language for managing relational databases. It allows you to define schemas, insert, update, and query data using declarative statements. SQL is fundamental for any backend or data-driven application.</p>
+    <pre><code>CREATE TABLE Students (
+  ID INT PRIMARY KEY,
+  Name VARCHAR(100),
+  Age INT
+);
+
+SELECT * FROM Students;</code></pre>
+    <textarea class="editor">// Write SQL query here...</textarea>
+    <button class="run-btn">Run SQL</button>
+    <div class="output-box">Output will appear here...</div>
+  </div>
+
+  <!-- PL/SQL -->
+  <div class="db-card">
+    <h2>🟨 PL/SQL (Oracle)</h2>
+    <p>PL/SQL (Procedural Language/SQL) is Oracle's extension of SQL that supports procedural constructs like loops, conditions, and exception handling. It's used to write complex programs like stored procedures, functions, and triggers within Oracle databases.</p>
+    <pre><code>DECLARE
+  v_name VARCHAR2(50);
+BEGIN
+  SELECT name INTO v_name FROM Employees WHERE ID = 101;
+  DBMS_OUTPUT.PUT_LINE('Name: ' || v_name);
+END;</code></pre>
+    <textarea class="editor">// Write PL/SQL block here...</textarea>
+    <button class="run-btn">Run PL/SQL</button>
+    <div class="output-box">Output will appear here...</div>
+  </div>
+
+  <!-- T-SQL -->
+  <div class="db-card">
+    <h2>🟥 T-SQL (SQL Server)</h2>
+    <p>T-SQL, or Transact-SQL, is Microsoft’s proprietary extension to SQL for SQL Server. It includes procedural programming features like variables, control-of-flow, error handling, and transaction control, making it powerful for backend logic and automation.</p>
+    <pre><code>BEGIN TRY
+  BEGIN TRANSACTION
+    UPDATE Employees SET Salary = Salary * 1.1 WHERE Dept = 'HR';
+  COMMIT
+END TRY
+BEGIN CATCH
+  ROLLBACK
+  PRINT 'Error occurred'
+END CATCH</code></pre>
+    <textarea class="editor">// Write T-SQL query here...</textarea>
+    <button class="run-btn">Run T-SQL</button>
+    <div class="output-box">Output will appear here...</div>
+  </div>
+
+  <!-- MongoDB -->
+  <div class="db-card">
+    <h2>🟩 MongoDB (NoSQL)</h2>
+    <p>MongoDB is a NoSQL database that stores data in flexible, JSON-like documents. It does not require a predefined schema, making it ideal for unstructured and semi-structured data. MongoDB is widely used in modern web applications due to its scalability.</p>
+    <pre><code>db.students.insertOne({
+  name: "Amit",
+  course: "CS",
+  marks: 90
+});
+
+db.students.find({ marks: { $gt: 80 } });</code></pre>
+    <textarea class="editor">// Write MongoDB command here...</textarea>
+    <button class="run-btn">Run MongoDB</button>
+    <div class="output-box">Output will appear here...</div>
+  </div>
+
+  <!-- Firebase -->
+  <div class="db-card">
+    <h2>🟨 Firebase Realtime DB</h2>
+    <p>Firebase Realtime Database is a cloud-hosted NoSQL database that lets you store and sync data between users in real time. It uses a JSON tree to store data and is commonly used in mobile and real-time applications like chat apps or collaborative tools.</p>
+    <pre><code>{
+  "users": {
+    "uid123": {
+      "name": "Khushi",
+      "email": "khushi@gmail.com"
+    }
+  }
+}</code></pre>
+    <textarea class="editor">// Firebase JSON or JS SDK code here...</textarea>
+    <button class="run-btn">Run Firebase</button>
+    <div class="output-box">Output will appear here...</div>
+  </div>
+
+  <!-- Neo4j -->
+  <div class="db-card">
+    <h2>🟪 Neo4j (Graph DB)</h2>
+    <p>Neo4j is a graph database that stores data as nodes, relationships, and properties. It uses the Cypher query language to express graph patterns, and is ideal for social networks, fraud detection, and recommendation systems where relationships matter most.</p>
+    <pre><code>CREATE (a:Person {name: 'Alice'})
+CREATE (b:Person {name: 'Bob'})
+CREATE (a)-[:FRIENDS_WITH]->(b);</code></pre>
+    <textarea class="editor">// Write Cypher query here...</textarea>
+    <button class="run-btn">Run Cypher</button>
+    <div class="output-box">Output will appear here...</div>
+  </div>
+
+  <!-- Redis -->
+  <div class="db-card">
+    <h2>🟥 Redis (Key-Value NoSQL)</h2>
+    <p>Redis is a high-performance, in-memory key-value store used for caching, session management, and message queues. It supports simple commands like SET and GET, and is known for lightning-fast read and write operations.</p>
+    <pre><code>SET username "khushi"
+GET username
+DEL username</code></pre>
+    <textarea class="editor">// Write Redis command here...</textarea>
+    <button class="run-btn">Run Redis</button>
+    <div class="output-box">Output will appear here...</div>
+  </div>
+
+</div>
+
+<!-- JavaScript: Run Buttons -->
+<script>
+  document.querySelectorAll('.run-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      const code = button.previousElementSibling.value;
+      const output = button.nextElementSibling;
+      output.textContent = "⚙️ Simulated Execution:\n\n" + code;
+    });
+  });
+</script>
+
+<div >
+</div> 
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-left">
+      <h3>StackSprint</h3>
+      <p>Your all-in-one tech learning guide. Master frontend, backend & databases.</p>
+    </div>
+    <div class="footer-links">
+      <a href="frontend.html">Frontend</a>
+      <a href="backend.html">Backend</a>
+      <a href="database.html">Database</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div class="footer-right">
+      <p>Connect with us:</p>
+      <div class="social-icons">
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" /></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Twitter" /></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733614.png" alt="Instagram" /></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 StackSprint. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>

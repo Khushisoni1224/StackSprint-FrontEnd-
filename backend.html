@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Pyodide -->
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js"></script>
+
+  <!-- CodeMirror -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.15/mode/python/python.min.js"></script>
+
+    <title>Backend Page-Stacksprint </title>
+</head>
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #e6f7ff, #f9fcff);
+  margin: 0;
+  padding: 0;
+  color: #1a1a1a;
+
+}
+
+header {
+  text-align: center;
+  border: 2px solid #058293;
+  border-radius: 20px;
+  background-color: #4e97b1;
+  color: #fff;
+  padding: 15px;
+  margin: 20px;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 600;
+}
+
+.main-content {
+  margin: 20px;
+  padding: 20px;
+  animation: slideIn 1s ease-out;
+}
+
+nav ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  background-color: lightskyblue;
+  padding: 15px;
+  border-radius: 50px;
+  margin: 20px auto;
+  animation: fadeIn 1.3s ease;
+}
+
+nav ul li a {
+  text-decoration: none;
+  margin: 0 20px;
+  font-weight: 500;
+  color: #004466;
+  transition: color 0.3s ease-in-out;
+}
+
+nav ul li a:hover {
+  color: #00796b;
+  font-weight: 600;
+}
+
+.back-arrow {
+  display: inline-block;
+  font-size: 18px;
+  background-color: #058293;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: transform 0.3s ease-in-out, background-color 0.3s;
+  animation: popIn 0.8s ease-in-out;
+}
+
+.back-arrow:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.data {
+  background-color: #ffffff;
+  border-left: 5px solid #058293;
+  border-radius: 10px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+  padding: 30px;
+  margin: 30px 0;
+  animation: fadeInUp 1s ease-out;
+}
+
+.card {
+  background: #fefefe;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin: 25px auto;
+  max-width: 800px;
+  animation: slideIn 0.8s ease-in-out;
+}
+
+textarea, .CodeMirror, .java-editor, .cs-editor {
+  border: 2px solid #058293;
+  border-radius: 10px;
+  padding: 12px;
+  font-family: monospace;
+  font-size: 14px;
+  width: 100%;
+  height: 300px;
+  background-color: #f5faff;
+  color: #000;
+}
+
+button, .button-node, .java-run-btn, .cs-run-btn {
+  margin-top: 12px;
+  padding: 10px 20px;
+  font-size: 15px;
+  background-color: #00796b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover, .button-node:hover, .java-run-btn:hover, .cs-run-btn:hover {
+  background-color: #004d40;
+  transform: scale(1.05);
+}
+
+#output, #node-output, #java-output, #cs-output {
+  background-color: #111;
+  color: #00ff88;
+  padding: 15px;
+  border-radius: 8px;
+  height: 200px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  text-align: left;
+  margin-top: 10px;
+  animation: fadeIn 1s ease;
+}
+.intro-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* or space-between */
+  gap: 20px;
+  padding: 20px;
+}
+
+.intro-data {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  background: #eaf9ff;
+  border: 2px solid #058293;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 15px;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.05);
+  max-width: 300px;
+  animation: slideIn 1s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideIn {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes popIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+@keyframes fadeInUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.site-footer {
+  background-color: #1b324e;
+  color: #e0f7fa;
+  padding: 2rem 1rem;
+  font-size: 0.9rem;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: auto;
+  gap: 2rem;
+}
+
+.footer-left h3 {
+  margin: 0;
+  color: #00acc1;
+}
+
+.footer-links a {
+  display: block;
+  color: #90e0ef;
+  text-decoration: none;
+  margin: 5px 0;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #00e5ff;
+}
+
+.footer-right p {
+  margin-bottom: 0.5rem;
+}
+
+.social-icons a img {
+  width: 24px;
+  margin-right: 10px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s ease;
+}
+
+.social-icons a:hover img {
+  transform: scale(1.1);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  color: #b0bec5;
+  border-top: 1px solid #37474f;
+  padding-top: 1rem;
+}
+
+
+</style>
+<body>
+    
+<!-- --------------------------------------------------------------------------  -->
+<div class="main-content">
+  <div class="go-back">
+          <a href="base.html" class="back-arrow" title="Back to Base Page">← </a>
+        </div>
+
+    <header>
+    <h1> Backend Learning </h1>
+    <h3> Backend development is the part of web development that deals with server-side logic, database management, and API integration. It handles the logic and data that powers the front end.</h3>
+    </header>
+    <br>
+    <nav>
+        <ul>
+            <li><a href="#intro">Introduction</a></li>
+            <li><a href="#python">Python</a></li>
+            <li><a href="#cpp">C++</a></li>
+            <li><a href="#node-js">Javascript(Node.js)</a></li>
+            <li><a href="#">Java</a></li>
+            <li><a href="#">C#</a></li>
+        </ul>
+    </nav>
+    <br>
+<div >
+
+<div id="intro" class="data">
+    <h1>Introduction of Backend Learning </h1>
+    <h3><b>Backend development refers to the server-side part of a web application. It focuses on how the website works, updates, and changes. Unlike frontend, which is about designing and user interaction, the backend deals with data storage, business logic, server configuration, and API communication .Whenever a user interacts with a web app—like logging in, filling a form, or making a purchase—the frontend sends a request to the backend. The backend processes this request, interacts with the database if needed, and sends the appropriate response back to the frontend.</b></h3>
+     <div class="intro-container" > 
+    <article class="intro-data">
+          <h3> <b> Key Components of Backend: </b></h3>
+           
+          <br><br>
+<h4><b>Server</b></h4> A system that receives requests from the client and returns responses.
+<h4><b>Database</b></h4> A structured way to store, retrieve, and manipulate data.
+<h4><b>Backend Framework</b></h4> A toolkit or set of libraries used to build and manage backend logic (e.g., Flask, Django, Express.js).
+<h4><b>APIs (Application Programming Interfaces)</b></h4> Act as bridges between the frontend and backend or between different services.
+<h4><b>Authentication & Authorization</b></h4> Verifying user identity and permissions.
+        </article>
+
+        <article class="intro-data">
+            <h3><b>Common Technologies Used: </b></h3><br><br>
+<h4><b>Languages</b></h4>Python, JavaScript (Node.js), Java, PHP, Ruby
+<h4><b>Frameworks</b></h4>Flask, Django, Express, Spring Boot
+<h4><b>Databases</b></h4>MySQL, PostgreSQL, MongoDB, Firebase
+<h4><b>Tools</b></h4> Git, Postman, Docker, Redis, Nginx
+
+        </article>
+
+        <article class="intro-data">
+            <h3><b>Why Learn Backend?</b></h3>
+<h4>Backend is the<b> brain of any web application</b></h4>
+<h4>It is essential for handling real-time data, security, and performance.</h4>
+<h4>High demand in job markets for Backend and Full-Stack Developers.</h4>
+<h4>Offers scalability and integration with AI, ML, IoT, and DevOps tools.</h4>
+        </article>
+</div> 
+
+</div>
+
+<!-- --------------------------------------------------------------------------- -->
+
+
+<p></p>
+<div id="python" class="data">
+<h1>Backend Learning - Python Dataset + Live Editor</h1>
+
+<div class="card">
+  <h2>1. Introduction to Backend</h2>
+  <p>Backend development involves server-side logic, database management, authentication, and communication with the frontend. Python is one of the most preferred backend languages due to its simplicity and power.</p>
+</div>
+
+<div class="card">
+  <h2>2. Python Basics</h2>
+  <p>Start with understanding variables, data types, operators, and basic input/output in Python.</p>
+  <a href="https://www.freecodecamp.org/learn/scientific-computing-with-python/python-basics/" target="_blank">📘 Learn Python Basics – freeCodeCamp</a>
+</div>
+
+<div class="card">
+  <h2>3. Control Flow – if, elif, else</h2>
+  <p>Control the execution of your code using conditions and branching logic.</p>
+  <a href="https://www.freecodecamp.org/learn/scientific-computing-with-python/python-conditional-statements/" target="_blank">📘 Learn Conditional Statements</a>
+</div>
+
+<div class="card">
+  <h2>4. Loops in Python</h2>
+  <p>Use loops like <code>for</code> and <code>while</code> to repeat code and iterate over data.</p>
+  <a href="https://www.freecodecamp.org/learn/scientific-computing-with-python/python-loops/" target="_blank">📘 Learn Python Loops</a>
+</div>
+
+<div class="card">
+  <h2>5. Functions and Arguments</h2>
+  <p>Functions help reuse code and organize logic. Learn how to create and call functions with parameters.</p>
+  <a href="https://www.freecodecamp.org/learn/scientific-computing-with-python/python-functions/" target="_blank">📘 Learn Python Functions</a>
+</div>
+
+<div class="card">
+  <h2>6. Data Structures</h2>
+  <p>Master Lists, Tuples, Sets, and Dictionaries – the most commonly used data structures in Python.</p>
+  <a href="https://www.mygreatlearning.com/academy/learn-for-free/courses/data-structures-in-python" target="_blank">📘 Data Structures in Python – Great Learning</a>
+</div>
+
+<div class="card">
+  <h2>7. Object-Oriented Programming (OOP)</h2>
+  <p>Understand classes, objects, inheritance, polymorphism, and encapsulation in Python.</p>
+  <a href="https://www.youtube.com/watch?v=Ej_02ICOIgs" target="_blank">📘 Watch OOP in Python – freeCodeCamp</a>
+</div>
+
+<div class="card">
+  <h2>8. File Handling</h2>
+  <p>Read and write data to files using <code>open()</code>, <code>read()</code>, and <code>write()</code> functions.</p>
+  <a href="https://www.mygreatlearning.com/academy/learn-for-free/courses/file-handling-in-python" target="_blank">📘 File Handling Tutorial</a>
+</div>
+
+<div class="card">
+  <h2>9. Exception Handling</h2>
+  <p>Use <code>try</code>, <code>except</code>, and <code>finally</code> blocks to handle errors gracefully.</p>
+  <a href="https://www.freecodecamp.org/learn/scientific-computing-with-python/python-error-handling/" target="_blank">📘 Learn Error Handling</a>
+</div>
+
+<div class="card">
+  <h2>10. Working with Modules and Packages</h2>
+  <p>Organize your code using modules, and reuse code with Python packages.</p>
+  <a href="https://www.freecodecamp.org/learn/scientific-computing-with-python/python-importing-and-using-python-modules/" target="_blank">📘 Learn Modules & Packages</a>
+</div>
+
+<div class="card">
+  <h2>11. Virtual Environments & pip</h2>
+  <p>Use virtual environments to manage dependencies and <code>pip</code> to install packages.</p>
+  <a href="https://www.coursera.org/learn/python-project" target="_blank">📘 Learn via Coursera (Free Audit)</a>
+</div>
+
+<div class="card">
+  <h2>12. Build a Python Project</h2>
+  <p>Apply your skills to build a basic backend project like a calculator, to-do app, or user registration system.</p>
+  <a href="https://www.youtube.com/watch?v=8ext9G7xspg" target="_blank">📘 Beginner Python Projects – freeCodeCamp</a>
+</div>
+
+<div class="card">
+  <h2>13. Popular Python Libraries for Backend</h2>
+  <p>After mastering core Python, explore libraries that enhance backend development:</p>
+  <ul>
+    <li><strong>Flask:</strong> Lightweight web framework</li>
+    <li><strong>Django:</strong> Full-stack web framework</li>
+    <li><strong>SQLAlchemy:</strong> ORM for working with databases</li>
+    <li><strong>Requests:</strong> HTTP requests handling</li>
+    <li><strong>Jinja2:</strong> Template engine for rendering HTML</li>
+  </ul>
+  <a href="https://realpython.com/tutorials/web-dev/" target="_blank">📘 Explore Python Web Dev Tutorials – RealPython</a>
+</div>
+
+
+  <h2>Python Code Editor</h2>
+
+  <textarea id="code">print("Hello from backend!")</textarea><br />
+  <button onclick="runPythonCode()">▶ Run Code</button>
+
+  <div id="output">Output will appear here...</div>
+
+  <script>
+    let editor;
+    let pyodideReady = false;
+    let pyodide;
+
+    async function init() {
+      // Load Pyodide
+      pyodide = await loadPyodide();
+      pyodideReady = true;
+
+      // Setup CodeMirror
+      editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        lineNumbers: true,
+        mode: "python",
+        indentUnit: 4,
+        smartIndent: true,
+        lineWrapping: true,
+      });
+    }
+
+    init();
+
+    async function runPythonCode() {
+      const code = editor.getValue();
+      const outputDiv = document.getElementById("output");
+      outputDiv.classList.remove("error");
+
+      if (!pyodideReady) {
+        outputDiv.innerText = "⏳ Python is still loading...";
+        return;
+      }
+
+      try {
+        // Redirect stdout/stderr
+        await pyodide.runPythonAsync(`
+import sys
+from io import StringIO
+sys.stdout = mystdout = StringIO()
+sys.stderr = mystderr = StringIO()
+`);
+
+        // Run the user's code
+        await pyodide.runPythonAsync(code);
+
+        // Extract the output
+        const output = pyodide.runPython("mystdout.getvalue()");
+        const error = pyodide.runPython("mystderr.getvalue()");
+
+        if (error.trim()) {
+          outputDiv.innerText = error;
+          outputDiv.classList.add("error");
+        } else {
+          outputDiv.innerText = output || "✅ Code ran successfully (no output)";
+        }
+      } catch (err) {
+        outputDiv.innerText = "💥 Execution error:\n" + err;
+        outputDiv.classList.add("error");
+      }
+    }
+  </script>
+
+  
+</div>
+
+<!-- ----------------------------------------------------------------------------- -->
+
+<p></p>
+<div id="cpp" class="data">
+    <h1>Backend Learning - C++ Dataset + Live Editor</h1>
+    <div class="card">
+  <h2>1. Introduction to C++</h2>
+  <p>C++ is a powerful general-purpose programming language. It's used in competitive programming, system-level software, games, and backend systems.</p>
+  <a href="https://www.learncpp.com/" target="_blank">📘 Learn C++ – LearnCpp.com</a>
+</div>
+
+<div class="card">
+  <h2>2. Basic Syntax</h2>
+  <p>Understand how to write a simple C++ program with <code>main()</code> function, semicolons, and statements.</p>
+  <a href="https://www.programiz.com/cpp-programming/structure" target="_blank">📘 Program Structure – Programiz</a>
+</div>
+
+<div class="card">
+  <h2>3. Data Types & Variables</h2>
+  <p>Learn how to declare variables of different types like int, float, char, and string.</p>
+  <a href="https://www.geeksforgeeks.org/data-types-in-c/" target="_blank">📘 Data Types in C++ – GFG</a>
+</div>
+
+<div class="card">
+  <h2>4. Control Flow (if, else, switch)</h2>
+  <p>Make decisions in your program using conditional statements.</p>
+  <a href="https://www.programiz.com/cpp-programming/if-else" target="_blank">📘 If Else in C++ – Programiz</a>
+</div>
+
+<div class="card">
+  <h2>5. Loops (for, while, do-while)</h2>
+  <p>Repeat actions using loop constructs.</p>
+  <a href="https://www.programiz.com/cpp-programming/for-loop" target="_blank">📘 C++ Loops – Programiz</a>
+</div>
+
+<div class="card">
+  <h2>6. Functions in C++</h2>
+  <p>Use functions to modularize your code and improve reusability.</p>
+  <a href="https://www.programiz.com/cpp-programming/functions" target="_blank">📘 Functions in C++ – Programiz</a>
+</div>
+
+<div class="card">
+  <h2>7. Arrays and Strings</h2>
+  <p>Store collections of data using arrays and manipulate text using strings.</p>
+  <a href="https://www.programiz.com/cpp-programming/arrays" target="_blank">📘 Arrays in C++ – Programiz</a>
+</div>
+
+<div class="card">
+  <h2>8. Object-Oriented Programming</h2>
+  <p>Understand core OOP concepts like classes, objects, inheritance, and polymorphism.</p>
+  <a href="https://www.geeksforgeeks.org/object-oriented-programming-in-cpp/" target="_blank">📘 OOP in C++ – GeeksforGeeks</a>
+</div>
+
+<div class="card">
+  <h2>9. File Handling</h2>
+  <p>Read and write to files using <code>fstream</code> in C++.</p>
+  <a href="https://www.programiz.com/cpp-programming/file-handling" target="_blank">📘 File Handling in C++ – Programiz</a>
+</div>
+
+<div class="card">
+  <h2>10. STL (Standard Template Library)</h2>
+  <p>Use built-in containers like vector, map, and set for fast coding.</p>
+  <a href="https://www.geeksforgeeks.org/the-c-standard-template-library-stl/" target="_blank">📘 STL Guide – GeeksforGeeks</a>
+</div>
+
+
+
+  <h2>💻 Simple C++ Editor with Output</h2>
+
+  <!-- OneCompiler C++ Editor Embed -->
+  <iframe class="iframe-cpp" src="https://onecompiler.com/embed/cpp" allow="clipboard-write" allowfullscreen></iframe>
+
+  <div class="note-cpp">
+    ✅ You can write, run, and see C++ output in the above editor.<br>
+    No setup, no download, 100% browser-based.
+  </div>
+
+
+
+</div>
+<!-- ------------------------------------------------------------------------------ -->
+ <p></p>
+ <div id="node-js" class="data" >
+    <h1>Backend Learning - Node.Js Dataset + Live Editor</h1>
+
+<div class="card">
+  <h2>1. Introduction to Node.js</h2>
+  <p>Node.js is a runtime environment that allows you to run JavaScript code on the server-side. It's built on Chrome's V8 engine and is ideal for scalable network applications.</p>
+</div>
+
+<div class="card">
+  <h2>2. Setting Up Node.js</h2>
+  <p>Install Node.js from <a href="https://nodejs.org" target="_blank">nodejs.org</a>. You can check installation using <code>node -v</code> in your terminal.</p>
+</div>
+
+<div class="card">
+  <h2>3. Your First Node.js Program</h2>
+  <p>Let's print "Hello, Node.js!"</p>
+  <div class="code">
+    console.log("Hello, Node.js!");
+  </div>
+</div>
+
+<div class="card">
+  <h2>4. Modules in Node.js</h2>
+  <p>Modules help organize code. You can create your own or use built-in modules like <code>fs</code> and <code>http</code>.</p>
+</div>
+
+<div class="card">
+  <h2>5. Creating a Simple Web Server</h2>
+  <p>This example creates a basic server that responds with "Welcome to Node.js".</p>
+  <div class="code">
+    const http = require('http');<br>
+    const server = http.createServer((req, res) => {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;res.end("Welcome to Node.js");<br>
+    });<br>
+    server.listen(3000);
+  </div>
+</div>
+
+<div class="card">
+  <h2>6. File System Module</h2>
+  <p>Using the <code>fs</code> module, you can read/write files.</p>
+  <div class="code">
+    const fs = require('fs');<br>
+    fs.writeFileSync('data.txt', 'Node.js is awesome!');
+  </div>
+</div>
+
+<div class="card">
+  <h2>7. Asynchronous Programming</h2>
+  <p>Node.js is non-blocking and uses callbacks, promises, or async/await.</p>
+  <div class="code">
+    const fetchData = async () => {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;return "Data fetched!";<br>
+    }<br>
+    fetchData().then(console.log);
+  </div>
+</div>
+
+<div class="card">
+  <h2>8. Free Learning Resource</h2>
+  <p><a href="https://www.freecodecamp.org/news/learn-node-by-building-5-projects/" target="_blank">FreeCodeCamp: Learn Node by Building Projects (with Certification)</a></p>
+</div>
+
+<h2 class="node-h2">🟢 Node.js Code Editor (Simulated with JS)</h2>
+
+  <textarea id="node-code">
+// Example Node.js code
+console.log("Hello from Node.js!");
+  </textarea>
+
+  <br>
+  <button class="button-node" onclick="runCode()">▶ Run Node.Js</button>
+
+  <div id="node-output">Output will appear here...</div>
+
+  <script>
+    function runCode() {
+      const code = document.getElementById("code").value;
+      const output = document.getElementById("output");
+      output.textContent = "";
+      const originalLog = console.log;
+      console.log = function(...args) {
+        output.textContent += args.join(" ") + "\n";
+      };
+      try {
+        eval(code);
+      } catch (err) {
+        output.textContent = "❌ Error: " + err.message;
+      }
+      console.log = originalLog;
+    }
+  </script>
+
+
+ </div>
+
+ <!-- -------------------------------------------------------------------------------- -->
+  <p></p>
+  <div id="java" class="data">
+    <h1>Backend Learning - Java Dataset + Live Editor</h1>
+
+<div class="card">
+  <h2>1. Introduction to Java</h2>
+  <p>Java is a high-level, object-oriented programming language used for building desktop, web, and mobile applications. It is platform-independent thanks to the Java Virtual Machine (JVM).</p>
+</div>
+
+<div class="card">
+  <h2>2. Installing Java</h2>
+  <p>Install the JDK (Java Development Kit) from <a href="https://www.oracle.com/java/technologies/javase-downloads.html" target="_blank">oracle.com</a>. Verify using <code>java -version</code> in your terminal.</p>
+</div>
+
+<div class="card">
+  <h2>3. Hello World Program</h2>
+  <p>A simple Java program prints a greeting.</p>
+  <div class="code">
+    public class Main {<br>
+    &nbsp;&nbsp;public static void main(String[] args) {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;System.out.println("Hello, Java!");<br>
+    &nbsp;&nbsp;}<br>
+    }
+  </div>
+</div>
+
+<div class="card">
+  <h2>4. Variables and Data Types</h2>
+  <p>Java supports data types like <code>int</code>, <code>double</code>, <code>char</code>, and <code>boolean</code>.</p>
+</div>
+
+<div class="card">
+  <h2>5. Control Statements</h2>
+  <p>Use <code>if</code>, <code>else</code>, <code>switch</code>, and loops like <code>for</code> and <code>while</code> to control the flow.</p>
+</div>
+
+<div class="card">
+  <h2>6. Object-Oriented Programming</h2>
+  <p>Java uses classes and objects. Concepts like inheritance, polymorphism, and encapsulation are key.</p>
+</div>
+
+<div class="card">
+  <h2>7. Functions and Parameters</h2>
+  <p>Functions in Java are called methods and are defined inside classes.</p>
+</div>
+
+<div class="card">
+  <h2>8. Free Learning Resource</h2>
+  <p><a href="https://www.freecodecamp.org/news/learn-java-free-java-course/" target="_blank">FreeCodeCamp: Learn Java – Full Course with Certification</a></p>
+</div>
+
+
+<h2 class="java-heading">☕ Java Code Editor (Simulated)</h2>
+
+  <textarea id="java-editor" class="java-editor">
+// Simulated Java Output
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, Khushi!");
+        System.out.println("This is Java in your browser!");
+    }
+}
+  </textarea>
+
+  <br>
+  <button onclick="runJava()" class="java-run-btn">▶ Run Java</button>
+
+  <div id="java-output">Output will appear here...</div>
+
+  <script>
+    function runJava() {
+      const code = document.getElementById("java-editor").value;
+      const output = document.getElementById("java-output");
+
+      const lines = code.split("\n");
+      let result = "";
+      for (let line of lines) {
+        line = line.trim();
+        if (line.startsWith("System.out.println(")) {
+          const match = line.match(/System\.out\.println\((.*?)\);?/);
+          if (match && match[1]) {
+            try {
+              const text = eval(match[1]); // only evaluates plain strings
+              result += text + "\n";
+            } catch {
+              result += "[Error evaluating output line]\n";
+            }
+          }
+        }
+      }
+
+      output.textContent = result || "⚠️ No output from System.out.println()";
+    }
+  </script>
+
+
+
+  </div>
+
+<!-- ------------------------------------------------------------------------------- -->
+ <p></p>
+ <div id="c#" class="data">
+    <h1>Backend Learning - C# Dataset + Live Editor</h1>
+    <div class="card">
+  <h2>1. Introduction to C#</h2>
+  <p>C# (pronounced “C-sharp”) is a modern, object-oriented programming language developed by Microsoft. It is commonly used for web, desktop, mobile, and game development via the .NET platform.</p>
+</div>
+
+<div class="card">
+  <h2>2. Setting Up C#</h2>
+  <p>You can install .NET SDK from <a href="https://dotnet.microsoft.com/en-us/download" target="_blank">dotnet.microsoft.com</a>. Verify with <code>dotnet --version</code>.</p>
+</div>
+
+<div class="card">
+  <h2>3. Hello World Program</h2>
+  <p>This is a basic C# program:</p>
+  <div class="code">
+    using System;<br>
+    class Program {<br>
+    &nbsp;&nbsp;static void Main() {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;Console.WriteLine("Hello, C#!");<br>
+    &nbsp;&nbsp;}<br>
+    }
+  </div>
+</div>
+
+<div class="card">
+  <h2>4. Variables and Data Types</h2>
+  <p>C# has types like <code>int</code>, <code>float</code>, <code>bool</code>, <code>string</code>, and <code>char</code>.</p>
+</div>
+
+<div class="card">
+  <h2>5. Conditional Statements</h2>
+  <p>C# supports <code>if</code>, <code>else</code>, <code>switch</code>, <code>for</code>, and <code>while</code> loops.</p>
+</div>
+
+<div class="card">
+  <h2>6. Object-Oriented Concepts</h2>
+  <p>C# uses classes and objects, supporting OOP principles like encapsulation, inheritance, and polymorphism.</p>
+</div>
+
+<div class="card">
+  <h2>7. Functions and Methods</h2>
+  <p>Methods in C# are functions defined inside classes and used to encapsulate behavior.</p>
+</div>
+
+<div class="card">
+  <h2>8. Free Learning Resource</h2>
+  <p><a href="https://www.freecodecamp.org/news/learn-c-sharp-free/" target="_blank">FreeCodeCamp: Learn C# (Full Free Course)</a></p>
+</div>
+
+
+<h2 class="cs-heading">🟣 C# Code Editor (Simulated)</h2>
+
+<textarea id="cs-editor" class="cs-editor">
+// C# Sample
+using System;
+class Program {
+    static void Main() {
+        Console.WriteLine("Hello from C#!");
+        Console.WriteLine("This is simulated output.");
+    }
+}
+</textarea>
+
+<br>
+<button onclick="runCS()" class="cs-run-btn">▶ Run C#</button>
+
+<div id="cs-output">Output will appear here...</div>
+
+<script>
+function runCS() {
+  const code = document.getElementById("cs-editor").value;
+  const output = document.getElementById("cs-output");
+
+  const lines = code.split("\n");
+  let result = "";
+  for (let line of lines) {
+    line = line.trim();
+    if (line.startsWith("Console.WriteLine(")) {
+      const match = line.match(/Console\.WriteLine\((.*?)\);?/);
+      if (match && match[1]) {
+        try {
+          const text = eval(match[1]); // only evaluates quoted strings
+          result += text + "\n";
+        } catch {
+          result += "[Error evaluating line]\n";
+        }
+      }
+    }
+  }
+
+  output.textContent = result || "⚠️ No output from Console.WriteLine()";
+}
+</script>
+
+ </div>
+
+</div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-left">
+      <h3>StackSprint</h3>
+      <p>Your all-in-one tech learning guide. Master frontend, backend & databases.</p>
+    </div>
+    <div class="footer-links">
+      <a href="frontend.html">Frontend</a>
+      <a href="backend.html">Backend</a>
+      <a href="database.html">Database</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div class="footer-right">
+      <p>Connect with us:</p>
+      <div class="social-icons">
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" /></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Twitter" /></a>
+        <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733614.png" alt="Instagram" /></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 StackSprint. All rights reserved.</p>
+  </div>
+</footer>
+    
+</body>
+</html>
