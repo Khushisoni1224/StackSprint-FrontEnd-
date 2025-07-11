@@ -1,6 +1,3 @@
-# StackSprint-FrontEnd-
-StackSprint (Frontend Version) is a beginner-friendly, interactive learning hub designed using HTML, CSS, and JavaScript. It offers structured guidance on Frontend, Backend, and Database concepts, with built-in code editors and real-time previews for hands-on practice.
-
 # 🚀 StackSprint – Frontend Learning Platform
 
 **StackSprint** is a beginner-focused, interactive frontend learning project built using HTML, CSS, and JavaScript. It is designed to help learners explore the fundamentals of web development with live editors, concept overviews, and modular sections like Frontend, Backend, and Database. The project aims to evolve into a complete full-stack platform with backend integration in the future.
